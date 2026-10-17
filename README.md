@@ -8,11 +8,25 @@ não como versão estável.**
 
 ## Baixar
 
-[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.1/Birfree-1.0.0-x86_64.tar.gz)
+[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.2/Birfree-1.0.0-x86_64.tar.gz)
 
 O arquivo único tem aproximadamente **24,2 MiB** e contém os pacotes
 `birfree` e `birfree-icons`, o instalador, instruções, licença e somas SHA-256.
 Não é uma ISO e não precisa da pasta do projeto nem de recompilação.
+
+## Animações — teste 2
+
+Efeitos da comunidade KDE, já incluídos no KWin:
+
+- **Scale** ao abrir/fechar janelas.
+- **Magic Lamp** ao minimizar/restaurar.
+- **Wobbly Windows** ao arrastar janelas.
+
+O Condense do Birfree fica desligado. Esta revisão altera os padrões da
+sessão e reaproveita os binários existentes, sem recompilar.
+O pacote `birfree` passa de `1.0.0.r67.gf0eb355a-1` para
+`1.0.0.r67.gf0eb355a-2`; os ícones permanecem iguais.
+Para quem já usa o Birfree, instale o novo arquivo e saia/entre na sessão.
 
 ## Requisitos
 
@@ -57,7 +71,7 @@ sha256sum Birfree-1.0.0-x86_64.tar.gz
 SHA-256 desta pré-release:
 
 ```text
-fcae5175c5459f2ea372cc973ca4cee368e3b3216671bb17f9dc3adf8f6e09ee
+5d5344bc2ec858af54e551276b4d334f574755d5c39f2db4f5b663ff8a624d56
 ```
 
 O instalador também confere os arquivos extraídos usando o `SHA256SUMS`

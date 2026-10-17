@@ -1,6 +1,12 @@
-Distribuição: TESTE / pré-release v1.0.0-test.1
-Arquitetura: x86_64
-birfree: 1.0.0.r67.gf0eb355a-1
 birfree-icons: 1.0.0.r15.gf2e541b6-1
-KWin usado na compilação: 6.7.5-1
-Qt Base usado na compilação: 6.11.2-3
+birfree: 1.0.0.r67.gf0eb355a-2
+
+Compilação de birfree-icons-1.0.0.r15.gf2e541b6-1-any.pkg.tar.zst:
+installed = kwin-6.7.5-1-x86_64
+installed = kwin-x11-6.7.5-1-x86_64
+installed = qt6-base-6.11.2-3-x86_64
+
+Compilação de birfree-1.0.0.r67.gf0eb355a-2-x86_64.pkg.tar.zst:
+installed = kwin-6.7.5-1-x86_64
+installed = kwin-x11-6.7.5-1-x86_64
+installed = qt6-base-6.11.2-3-x86_64
