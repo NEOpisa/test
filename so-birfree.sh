@@ -110,6 +110,32 @@ so_instalados() {
     for p in "$@"; do instalado "$p" && echo "$p"; done
     return 0
 }
+# O Arch Linux Archive é um servidor só e corta quem abre muitas conexões:
+# com ParallelDownloads alto ele chega a "Less than 1 bytes/sec transferred
+# the last 10 seconds" e o pacman desiste da transação inteira. Aqui o pacman
+# baixa de 3 em 3 e tenta de novo; o que já desceu fica no cache.
+PACMAN_CONF_ARCHIVE=""
+pacman_archive() {
+    local tentativa conf
+    if [[ -z $PACMAN_CONF_ARCHIVE ]]; then
+        PACMAN_CONF_ARCHIVE=$(mktemp --tmpdir birfree-pacman.XXXXXX.conf)
+        trap 'rm -f "$PACMAN_CONF_ARCHIVE"' EXIT
+        sed -E 's/^[[:space:]]*#?[[:space:]]*ParallelDownloads.*/ParallelDownloads = 3/' \
+            /etc/pacman.conf >"$PACMAN_CONF_ARCHIVE"
+        grep -q '^ParallelDownloads' "$PACMAN_CONF_ARCHIVE" ||
+            sed -i 's/^\[options\]$/&\nParallelDownloads = 3/' "$PACMAN_CONF_ARCHIVE"
+    fi
+    conf=$PACMAN_CONF_ARCHIVE
+    for tentativa in 1 2 3 4 5; do
+        sudo pacman --config "$conf" "$@" && return 0
+        ((tentativa < 5)) || break
+        info "o download falhou (o Archive costuma ficar lento); tentando de novo em 15 s ($((tentativa + 1))/5)"
+        sleep 15
+        # depois do -yy da 1ª tentativa o banco já está na data travada
+        set -- "${@/#-Syyu/-Syu}"
+    done
+    return 1
+}
 
 # ------------------------------------------------------------ migração --
 conferir() {
@@ -148,6 +174,15 @@ travar_sistema() {
     passo "Travando o sistema em ${TRAVA} (Arch Linux Archive)"
     if grep -q "archive.archlinux.org/repos/$TRAVA/" "$MIRRORLIST" 2>/dev/null; then
         ok "o mirrorlist já aponta para $TRAVA"
+        # Rodada de novo (ex.: o download falhou da outra vez): o mirrorlist de
+        # antes está num backup anterior; o --desfazer só olha o último
+        local antes
+        antes=$(ls -1d "$GUARDA_RAIZ"/*/raiz"$MIRRORLIST" 2>/dev/null | grep -v "/$CARIMBO/" | tail -1) || true
+        if [[ -n $antes ]]; then
+            x sudo mkdir -p "$GUARDA/raiz/etc/pacman.d"
+            x sudo cp -a "$antes" "$GUARDA/raiz$MIRRORLIST"
+            info "mirrorlist de antes trazido de ${antes/#$HOME/\~}"
+        fi
     else
         x sudo mkdir -p "$GUARDA/raiz/etc/pacman.d"
         x sudo cp -a "$MIRRORLIST" "$GUARDA/raiz$MIRRORLIST"
@@ -166,7 +201,12 @@ travar_sistema() {
     fi
     # -yy: o banco local foi sincronizado com o Arch de hoje (Plasma 6.8) e
     # precisa voltar ao da data travada; o -u traz só o que faltar até ela
-    x sudo pacman -Syyu --noconfirm || erro "o pacman -Syyu na data travada falhou; nada foi removido"
+    if ((SIMULAR)); then
+        info "[simular] sudo pacman -Syyu --noconfirm (de 3 em 3 downloads, até 5 tentativas)"
+    else
+        pacman_archive -Syyu --noconfirm ||
+            erro "o pacman -Syyu na data travada falhou (o Archive pode estar fora do ar); nada foi removido. Rode o ./so-birfree.sh de novo mais tarde: ele continua de onde parou"
+    fi
     ok "repositórios sincronizados em $TRAVA (versões instaladas conferidas antes de remover sessões)"
 }
 
@@ -177,7 +217,7 @@ instalar_birfree() {
         info "[simular] ${PACOTES_INSTALADOR} (ou instalar.sh na árvore fonte)"
         return
     fi
-    sudo pacman -S --needed --noconfirm "${SUPORTE[@]}" || erro "falha nas dependências; nenhuma sessão removida"
+    pacman_archive -S --needed --noconfirm "${SUPORTE[@]}" || erro "falha nas dependências; nenhuma sessão removida"
     if [[ -x "$PACOTES_INSTALADOR" ]]; then
         "$PACOTES_INSTALADOR" || erro "a instalação do Birfree falhou; nenhuma sessão removida. Backup: $GUARDA"
     else
@@ -345,7 +385,11 @@ desfazer() {
     pacotes=$(cat "$ultimo/plasma-removidos.txt" "$ultimo/lxqt-removidos.txt" 2>/dev/null | tr '\n' ' ')
     if [[ -n $pacotes ]]; then
         # shellcheck disable=SC2086
-        x sudo pacman -S --needed --noconfirm $pacotes || erro "não consegui reinstalar: $pacotes"
+        if ((SIMULAR)); then
+            info "[simular] sudo pacman -S --needed --noconfirm $pacotes"
+        else
+            pacman_archive -S --needed --noconfirm $pacotes || erro "não consegui reinstalar: $pacotes"
+        fi
         ok "reinstalados: $pacotes"
     fi
     # Compatibilidade com os backups gerados em 16/10 pelo script original.

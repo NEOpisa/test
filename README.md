@@ -1,10 +1,10 @@
-# Birfree — TESTE 4
+# Birfree — TESTE 5
 
 Pré-release experimental para **Arch Linux x86_64**.
 
 ## Baixar
 
-[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.4/Birfree-1.0.0-x86_64.tar.gz)
+[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5/Birfree-1.0.0-x86_64.tar.gz)
 
 O arquivo inclui os pacotes, o **so-birfree.sh original**, instalador,
 licença, versões e checksums. Não precisa do repositório privado nem compilar.
@@ -27,7 +27,25 @@ O script baixa o teste mais novo, confere o SHA-256 e roda
 `./instalar-birfree --atualizar`. Depois, saia da sessão e entre de novo em
 **Birfree**.
 
-## O que há de novo no teste 4
+## O que há de novo no teste 5
+
+**Instalação que aguenta o Arch Archive lento.** No teste 4 a migração
+podia parar em
+
+```text
+error: failed retrieving file 'mesa-…' from archive.archlinux.org : Operation too slow. Less than 1 bytes/sec transferred the last 10 seconds
+✗ o pacman -Syyu na data travada falhou; nada foi removido
+```
+
+O Archive é um servidor só e engasga com muitos downloads ao mesmo tempo.
+Agora o `so-birfree.sh` baixa dele de 3 em 3 e tenta até 5 vezes (o que
+já baixou fica no cache). Se parou assim no teste 4, nada foi removido:
+baixe o teste 5 e rode a instalação de novo — o backup do mirrorlist
+original continua valendo para o `--desfazer`.
+
+Os pacotes são os mesmos do teste 4; só o `so-birfree.sh` mudou.
+
+## O que havia de novo no teste 4
 
 **Só escuro.** Nada fica branco, nem os navegadores:
 
@@ -81,17 +99,17 @@ As animações do teste 2 permanecem: Scale, Magic Lamp e Wobbly Windows.
 Primeiro, baixe o arquivo e o checksum:
 
 ```sh
-curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.4/Birfree-1.0.0-x86_64.tar.gz
-curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.4/SHA256SUMS
+curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5/Birfree-1.0.0-x86_64.tar.gz
+curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5/SHA256SUMS
 sha256sum --check SHA256SUMS
 ```
 
 Extraia em uma pasta nova e entre nela:
 
 ```sh
-mkdir Birfree-teste4
-tar -xf Birfree-1.0.0-x86_64.tar.gz -C Birfree-teste4
-cd Birfree-teste4/Birfree-1.0.0-x86_64
+mkdir Birfree-teste5
+tar -xf Birfree-1.0.0-x86_64.tar.gz -C Birfree-teste5
+cd Birfree-teste5/Birfree-1.0.0-x86_64
 ```
 
 Confira o plano sem mudar nada:
@@ -140,6 +158,9 @@ O pacote não traz todas as dependências; elas vêm dos repositórios do sistem
 - Teste 4: arquivo extraído fora do projeto, `--mostrar` e
   `--atualizar --simular` passaram; as configurações novas e o só escuro
   foram testados na sessão Birfree em janela.
+- Teste 5: as tentativas do download testadas com `sudo` falso; `--mostrar`
+  e `--simular` do arquivo extraído passaram (o `--simular` mostra o backup
+  do mirrorlist levado adiante numa segunda rodada).
 
 A migração completa ainda precisa ser validada em uma VM limpa e no
 computador que apresentou o problema.
@@ -147,7 +168,7 @@ computador que apresentou o problema.
 SHA-256 do arquivo desta pré-release:
 
 ```text
-5be1b79e6dafcce4deecaf37809de9ad29d6098747edf2830c82c4d2b72d9c27
+413f006e4fd7f46a742553fccda97401c267015bc2adfe88692a8bec386c7bbb
 ```
 
 ## Licença
