@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Entrada única da migração original, com pacotes prontos no arquivo público.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+if [[ -f "$ROOT/so-birfree.sh" ]]; then
+  exec bash "$ROOT/so-birfree.sh" "$@"
+fi
+SRC="${BIRFREE_SRC:-$(cd "$ROOT/../.." && pwd)/birfree}"
+[[ -f "$SRC/so-birfree.sh" ]] || { echo 'Não encontrei so-birfree.sh; defina BIRFREE_SRC.' >&2; exit 1; }
+export BIRFREE_PACOTES_INSTALADOR="$ROOT/instalar-pacotes"
+exec bash "$SRC/so-birfree.sh" "$@"
