@@ -1,0 +1,6 @@
+Distribuição: TESTE / pré-release v1.0.0-test.1
+Arquitetura: x86_64
+birfree: 1.0.0.r67.gf0eb355a-1
+birfree-icons: 1.0.0.r15.gf2e541b6-1
+KWin usado na compilação: 6.7.5-1
+Qt Base usado na compilação: 6.11.2-3
