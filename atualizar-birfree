@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Atualiza o Birfree já instalado para o teste mais novo deste repositório.
+# Baixa o arquivo da Release mais recente (pré-releases incluídas), confere o
+# SHA-256 e roda ./instalar-birfree --atualizar: só os pacotes do Birfree, sem
+# migrar, sem trocar repositórios e sem mexer nas sessões.
+#
+#   ./atualizar-birfree              o teste mais novo
+#   ./atualizar-birfree v1.0.0-test.4  um teste específico
+#
+# Rode como usuário normal; o pacman pede sudo e confirmação.
+set -euo pipefail
+REPO=NEOpisa/test
+ARQUIVO=Birfree-1.0.0-x86_64.tar.gz
+[[ $EUID -ne 0 ]] || { echo 'Execute como usuário normal.' >&2; exit 1; }
+for cmd in curl sha256sum tar python3; do
+    command -v "$cmd" >/dev/null || { echo "Falta o comando: $cmd" >&2; exit 1; }
+done
+
+tag=${1:-}
+if [[ -z $tag ]]; then
+    # A primeira da lista é a mais nova, mesmo sendo pré-release
+    tag=$(curl -fsSL "https://api.github.com/repos/$REPO/releases?per_page=1" \
+        | python3 -c 'import json,sys; print(json.load(sys.stdin)[0]["tag_name"])')
+fi
+echo "Birfree: atualizando para $tag"
+
+pasta=$(mktemp -d "${TMPDIR:-/tmp}/birfree-atualizar.XXXXXX")
+trap 'rm -rf "$pasta"' EXIT
+cd "$pasta"
+base="https://github.com/$REPO/releases/download/$tag"
+curl -fL --progress-bar -O "$base/$ARQUIVO"
+curl -fsSL -O "$base/SHA256SUMS"
+sha256sum --check SHA256SUMS
+tar -xf "$ARQUIVO"
+cd "${ARQUIVO%.tar.gz}"
+./instalar-birfree --atualizar

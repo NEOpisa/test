@@ -1,12 +1,12 @@
 birfree-icons: 1.0.0.r15.gf2e541b6-1
-birfree: 1.0.0.r67.gf0eb355a-2
+birfree: 1.0.0.r71.g8b714f89-1
 
 Compilação de birfree-icons-1.0.0.r15.gf2e541b6-1-any.pkg.tar.zst:
 installed = kwin-6.7.5-1-x86_64
 installed = kwin-x11-6.7.5-1-x86_64
 installed = qt6-base-6.11.2-3-x86_64
 
-Compilação de birfree-1.0.0.r67.gf0eb355a-2-x86_64.pkg.tar.zst:
+Compilação de birfree-1.0.0.r71.g8b714f89-1-x86_64.pkg.tar.zst:
 installed = kwin-6.7.5-1-x86_64
 installed = kwin-x11-6.7.5-1-x86_64
 installed = qt6-base-6.11.2-3-x86_64

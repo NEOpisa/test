@@ -1,18 +1,63 @@
-# Birfree — TESTE 3
+# Birfree — TESTE 4
 
 Pré-release experimental para **Arch Linux x86_64**.
 
 ## Baixar
 
-[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.3/Birfree-1.0.0-x86_64.tar.gz)
+[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.4/Birfree-1.0.0-x86_64.tar.gz)
 
 O arquivo inclui os pacotes, o **so-birfree.sh original**, instalador,
 licença, versões e checksums. Não precisa do repositório privado nem compilar.
-Extraia em uma pasta nova; não misture com arquivos dos testes 1 ou 2.
+Extraia em uma pasta nova; não misture com arquivos dos testes anteriores.
 Os scripts neste repositório documentam o fluxo; para instalar, baixe o
 arquivo completo da Release, que também contém os pacotes.
 
-## O que mudou no instalador
+## Já tem o Birfree? Atualize
+
+Quem instalou um teste anterior só precisa atualizar os pacotes (não migra,
+não troca repositórios, não mexe nas sessões):
+
+```sh
+curl -fLO https://raw.githubusercontent.com/NEOpisa/test/main/atualizar-birfree
+chmod +x atualizar-birfree
+./atualizar-birfree
+```
+
+O script baixa o teste mais novo, confere o SHA-256 e roda
+`./instalar-birfree --atualizar`. Depois, saia da sessão e entre de novo em
+**Birfree**.
+
+## O que há de novo no teste 4
+
+**Só escuro.** Nada fica branco, nem os navegadores:
+
+- A cada login, um esquema de cores claro volta para o Birfree (o accent
+  fica). Com a sessão aberta, a shell desfaz na hora e avisa.
+- Apps GTK e Flatpak escuros (Adwaita escuro nos Flatpak).
+- Chrome, Chromium e Brave com interface e páginas escurecidas.
+- Firefox (nativo e Flatpak) com o Dark Reader instalado pela política,
+  tema escuro e PDF em fundo escuro. Feche e abra o navegador depois de
+  entrar na sessão.
+
+**Configurações do Birfree em cartões.** Configurações › Birfree virou um
+painel com Papel de parede, Cor de destaque, Janelas, Vidro, Barra e dock e
+Comportamento:
+
+- Papel de parede: preencher, ajustar, esticar, centralizar ou lado a lado;
+  um papel para cada monitor; troca automática (5 min, 15 min, 1 h, 1 dia,
+  em ordem ou aleatória) pela pasta Birfree Wallpapers.
+- Janelas: botões no padrão Birfree, todos à esquerda (✕ ─ ▢) ou todos à
+  direita (─ ▢ ✕); cantos e borda de vidro ajustáveis; animações de
+  abrir, minimizar e janelas gelatinosas.
+- Vidro: um controle só, do mais transparente ao mais sólido.
+- Barra e dock: tamanho da dock, altura da barra e barra que se esconde
+  quando há janela maximizada.
+
+Pacotes: `birfree 1.0.0.r71.g8b714f89-1` (novo) e
+`birfree-icons 1.0.0.r15.gf2e541b6-1` (o mesmo do teste 3). O instalador e o
+`so-birfree.sh` são os mesmos do teste 3.
+
+## O instalador (instalação nova)
 
 Por padrão, `./instalar-birfree` executa a migração do `so-birfree.sh`:
 
@@ -30,25 +75,23 @@ repositórios usados nas próximas atualizações.
 A migração usa o mesmo script da árvore original (commit `edcaa7ab`),
 adaptado para usar pacotes prontos no arquivo público.
 As animações do teste 2 permanecem: Scale, Magic Lamp e Wobbly Windows.
-Os pacotes da DE continuam em `birfree 1.0.0.r67.gf0eb355a-2` e
-`birfree-icons 1.0.0.r15.gf2e541b6-1`; o teste 3 muda o instalador.
 
 ## Passos
 
 Primeiro, baixe o arquivo e o checksum:
 
 ```sh
-curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.3/Birfree-1.0.0-x86_64.tar.gz
-curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.3/SHA256SUMS
+curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.4/Birfree-1.0.0-x86_64.tar.gz
+curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.4/SHA256SUMS
 sha256sum --check SHA256SUMS
 ```
 
 Extraia em uma pasta nova e entre nela:
 
 ```sh
-mkdir Birfree-teste3
-tar -xf Birfree-1.0.0-x86_64.tar.gz -C Birfree-teste3
-cd Birfree-teste3/Birfree-1.0.0-x86_64
+mkdir Birfree-teste4
+tar -xf Birfree-1.0.0-x86_64.tar.gz -C Birfree-teste4
+cd Birfree-teste4/Birfree-1.0.0-x86_64
 ```
 
 Confira o plano sem mudar nada:
@@ -71,6 +114,7 @@ No fim, salve o trabalho e entre em **Birfree** no SDDM.
 |---|---|
 | `./instalar-birfree --mostrar` | Confere integridade e lista os dois pacotes |
 | `./instalar-birfree --atualizar` | Atualiza só os pacotes; não migra nem troca repositórios |
+| `./atualizar-birfree` | Baixa o teste mais novo e roda o `--atualizar` |
 | `./instalar-birfree --desfazer` | Restaura arquivos do último backup e reinstala sessões retiradas |
 
 O desfazer mantém o Birfree instalado; não é rollback completo das atualizações
@@ -93,14 +137,17 @@ O pacote não traz todas as dependências; elas vêm dos repositórios do sistem
 - Script de migração contido no arquivo idêntico ao original atualizado.
 - Arquivo corrompido recusado antes de iniciar a migração.
 
+- Teste 4: arquivo extraído fora do projeto, `--mostrar` e
+  `--atualizar --simular` passaram; as configurações novas e o só escuro
+  foram testados na sessão Birfree em janela.
+
 A migração completa ainda precisa ser validada em uma VM limpa e no
-computador que apresentou o problema. A causa específica naquele computador
-não foi confirmada; o teste 3 corrige a diferença entre os instaladores.
+computador que apresentou o problema.
 
 SHA-256 do arquivo desta pré-release:
 
 ```text
-4420f61e22607958ee05a6b81bfc798bd10294c76fd25d5b61d2539291e9ede6
+5be1b79e6dafcce4deecaf37809de9ad29d6098747edf2830c82c4d2b72d9c27
 ```
 
 ## Licença
