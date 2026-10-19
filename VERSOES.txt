@@ -1,4 +1,4 @@
-Birfree teste 5.6 — 19/10/2026
+Birfree teste 5.5 (patch de 19/10/2026: Configurações do Sistema, sessão e gerenciador de apps)
 Base de execução: KDE/Qt atuais compatíveis; forks ainda em desenvolvimento.
 Commit dos fontes: 6745ac3251e17527b31118d9a5b379a5f0e66f62
 

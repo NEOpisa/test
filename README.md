@@ -1,10 +1,10 @@
-# Birfree — TESTE 5.6
+# Birfree — TESTE 5.5 (patch de 19/10)
 
 Pré-release experimental para **Arch Linux x86_64**.
 
 ## Baixar
 
-[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.6/Birfree-1.0.0-x86_64.tar.gz)
+[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.5/Birfree-1.0.0-x86_64.tar.gz)
 
 O arquivo inclui os pacotes prontos, os instaladores, licenças, versões,
 checksums e os fontes desta versão. Não precisa do repositório privado nem
@@ -27,7 +27,10 @@ Com o arquivo já extraído, `./instalar-birfree` faz a mesma atualização.
 pacotes. A migração completa do sistema virou `./instalar-birfree --migrar`;
 `--desfazer` continua igual.
 
-## O que há de novo no teste 5.6
+## O que há de novo no patch do 5.5 (19/10)
+
+O link e o `atualizar-birfree` são os mesmos do teste 5.5: quem já tem o
+Birfree só roda o `./atualizar-birfree` de novo.
 
 - **As Configurações voltam a ser as Configurações do Sistema.** O Bcontrol
   saiu. O que veio com ele ficou: a página Birfree ganhou o cartão
@@ -53,15 +56,15 @@ pacotes. A migração completa do sistema virou `./instalar-birfree --migrar`;
 
 Pacotes: `birfree 1.0.0.r82.g6745ac32-1` e
 `birfree-icons 1.0.0.r17.g3be6569a-1`, compilados contra KWin 6.7.5-1 e
-Qt 6.11.2-3. O instalador e o `so-birfree.sh` são os mesmos do teste 5.5.
+Qt 6.11.2-3. O instalador e o `so-birfree.sh` não mudaram.
 
-## O que havia de novo no teste 5.5
+## O que havia de novo no teste 5.5 (primeira versão)
 
 - **Sessão dentro do menu.** O botão Sessão saiu da barra superior e foi para
   o rodapé do menu de aplicativos: um clique expande Bloquear, Suspender,
   Sair, Reiniciar e Desligar ali mesmo. Sair, reiniciar e desligar pedem um
   segundo clique.
-- **Bcontrol**, Configurações próprias (retirado no teste 5.6).
+- **Bcontrol**, Configurações próprias (retirado no patch).
 - **Apps X11:** escala e leitura do teclado nas Configurações, e o comando
   `birfree-x11 <app>` para rodar um aplicativo X11 num XWayland em janela.
 - Dock em pé, à esquerda ou à direita, e correções de sessão, traduções e
@@ -146,17 +149,17 @@ As animações do teste 2 permanecem: Scale, Magic Lamp e Wobbly Windows.
 Primeiro, baixe o arquivo e o checksum:
 
 ```sh
-curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.6/Birfree-1.0.0-x86_64.tar.gz
-curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.6/SHA256SUMS
+curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.5/Birfree-1.0.0-x86_64.tar.gz
+curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.5/SHA256SUMS
 sha256sum --check SHA256SUMS
 ```
 
 Extraia em uma pasta nova e entre nela:
 
 ```sh
-mkdir Birfree-teste5.6
-tar -xf Birfree-1.0.0-x86_64.tar.gz -C Birfree-teste5.6
-cd Birfree-teste5.6/Birfree-1.0.0-x86_64
+mkdir Birfree-teste5.5
+tar -xf Birfree-1.0.0-x86_64.tar.gz -C Birfree-teste5.5
+cd Birfree-teste5.5/Birfree-1.0.0-x86_64
 ```
 
 Confira o plano sem mudar nada:
@@ -209,7 +212,7 @@ O pacote não traz todas as dependências; elas vêm dos repositórios do sistem
   e `--simular` do arquivo extraído passaram (o `--simular` mostra o backup
   do mirrorlist levado adiante numa segunda rodada).
 
-- Teste 5.6: arquivo extraído fora do projeto, checksums externo e interno,
+- Patch do 5.5: arquivo extraído fora do projeto, checksums externo e interno,
   `--mostrar` e `--simular` passaram; o gerenciador de apps e a sessão no
   menu foram testados na sessão Birfree em janela. Desinstalar pacote e
   Flatpak de verdade ainda precisa da sessão real.
@@ -220,7 +223,7 @@ computador que apresentou o problema.
 SHA-256 do arquivo desta pré-release:
 
 ```text
-db8a74d8fdc96d26a10d4de603045ffa89ec1740e386f0abda75297b2d688975
+e582149ecccd9d0b711766a9c88f3fa54ab650d4c42137b845822467792ed888
 ```
 
 ## Licença
