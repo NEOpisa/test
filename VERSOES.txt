@@ -1,9 +1,9 @@
-Birfree teste 5.5 — 19/10/2026
+Birfree teste 5.6 — 19/10/2026
 Base de execução: KDE/Qt atuais compatíveis; forks ainda em desenvolvimento.
-Commit dos fontes: dd6bf20b47b28b9ea468c6f4f429065c9bcb5c7b
+Commit dos fontes: 6745ac3251e17527b31118d9a5b379a5f0e66f62
 
-birfree-icons 1.0.0.r16.gdd6bf20b-1
-birfree 1.0.0.r78.gdd6bf20b-1
+birfree-icons 1.0.0.r17.g3be6569a-1
+birfree 1.0.0.r82.g6745ac32-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
 installed = kscreen-6.7.5-1-x86_64

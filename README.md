@@ -1,10 +1,10 @@
-# Birfree — TESTE 5.5
+# Birfree — TESTE 5.6
 
 Pré-release experimental para **Arch Linux x86_64**.
 
 ## Baixar
 
-[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.5/Birfree-1.0.0-x86_64.tar.gz)
+[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.6/Birfree-1.0.0-x86_64.tar.gz)
 
 O arquivo inclui os pacotes prontos, os instaladores, licenças, versões,
 checksums e os fontes desta versão. Não precisa do repositório privado nem
@@ -27,15 +27,41 @@ Com o arquivo já extraído, `./instalar-birfree` faz a mesma atualização.
 pacotes. A migração completa do sistema virou `./instalar-birfree --migrar`;
 `--desfazer` continua igual.
 
-## O que há de novo no teste 5.5
+## O que há de novo no teste 5.6
+
+- **As Configurações voltam a ser as Configurações do Sistema.** O Bcontrol
+  saiu. O que veio com ele ficou: a página Birfree ganhou o cartão
+  **Apps X11** (escala feita pelo próprio app e quando os apps X11 podem ler
+  o teclado). Favoritos e fixados na dock que apontavam para o Bcontrol
+  voltam sozinhos para as Configurações.
+- **Sessão no menu redesenhada.** Bloquear, Suspender, Sair, Reiniciar e
+  Desligar são botões redondos com ícones simbólicos, na mesma linha do
+  botão Sessão: não cobrem mais a lista de categorias. Sair, reiniciar e
+  desligar pedem um segundo clique; o botão fica vermelho e o rodapé diz
+  “Clique de novo para desligar”.
+- **Gerenciador de apps no menu** (clique direito num app):
+  - Novo atalho (também pelo botão “Novo atalho” no alto da grade), editar
+    atalho (nome, comando, ícone, comentário, abrir no terminal) e restaurar
+    o original.
+  - Tirar do menu: o app vai para a seção **Ocultos**, de onde volta.
+    Atalho criado por você vai para a lixeira.
+  - **Desinstalar**: pacote do sistema (pede a senha), Flatpak ou AppImage.
+    Antes, o menu mostra o que sai junto e pede confirmação; peças de que a
+    área de trabalho precisa não saem por ali.
+- Avisos da shell (atenção e erro) aparecem nas cores do Birfree; antes
+  saíam pretos.
+
+Pacotes: `birfree 1.0.0.r82.g6745ac32-1` e
+`birfree-icons 1.0.0.r17.g3be6569a-1`, compilados contra KWin 6.7.5-1 e
+Qt 6.11.2-3. O instalador e o `so-birfree.sh` são os mesmos do teste 5.5.
+
+## O que havia de novo no teste 5.5
 
 - **Sessão dentro do menu.** O botão Sessão saiu da barra superior e foi para
   o rodapé do menu de aplicativos: um clique expande Bloquear, Suspender,
   Sair, Reiniciar e Desligar ali mesmo. Sair, reiniciar e desligar pedem um
   segundo clique.
-- **Bcontrol**, as Configurações próprias do Birfree: Aparência, Sobre e Apps
-  X11 em páginas próprias; energia, telas, teclado, mouse, som e rede pelos
-  módulos do KDE embutidos. Avisa de alterações não salvas.
+- **Bcontrol**, Configurações próprias (retirado no teste 5.6).
 - **Apps X11:** escala e leitura do teclado nas Configurações, e o comando
   `birfree-x11 <app>` para rodar um aplicativo X11 num XWayland em janela.
 - Dock em pé, à esquerda ou à direita, e correções de sessão, traduções e
@@ -120,17 +146,17 @@ As animações do teste 2 permanecem: Scale, Magic Lamp e Wobbly Windows.
 Primeiro, baixe o arquivo e o checksum:
 
 ```sh
-curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5/Birfree-1.0.0-x86_64.tar.gz
-curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5/SHA256SUMS
+curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.6/Birfree-1.0.0-x86_64.tar.gz
+curl -fLO https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.6/SHA256SUMS
 sha256sum --check SHA256SUMS
 ```
 
 Extraia em uma pasta nova e entre nela:
 
 ```sh
-mkdir Birfree-teste5
-tar -xf Birfree-1.0.0-x86_64.tar.gz -C Birfree-teste5
-cd Birfree-teste5/Birfree-1.0.0-x86_64
+mkdir Birfree-teste5.6
+tar -xf Birfree-1.0.0-x86_64.tar.gz -C Birfree-teste5.6
+cd Birfree-teste5.6/Birfree-1.0.0-x86_64
 ```
 
 Confira o plano sem mudar nada:
@@ -183,13 +209,18 @@ O pacote não traz todas as dependências; elas vêm dos repositórios do sistem
   e `--simular` do arquivo extraído passaram (o `--simular` mostra o backup
   do mirrorlist levado adiante numa segunda rodada).
 
+- Teste 5.6: arquivo extraído fora do projeto, checksums externo e interno,
+  `--mostrar` e `--simular` passaram; o gerenciador de apps e a sessão no
+  menu foram testados na sessão Birfree em janela. Desinstalar pacote e
+  Flatpak de verdade ainda precisa da sessão real.
+
 A migração completa ainda precisa ser validada em uma VM limpa e no
 computador que apresentou o problema.
 
 SHA-256 do arquivo desta pré-release:
 
 ```text
-413f006e4fd7f46a742553fccda97401c267015bc2adfe88692a8bec386c7bbb
+db8a74d8fdc96d26a10d4de603045ffa89ec1740e386f0abda75297b2d688975
 ```
 
 ## Licença
