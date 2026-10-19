@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
-# Entrada única da migração original, com pacotes prontos no arquivo público.
+# Instala a DE completa; a migração antiga continua disponível explicitamente.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-if [[ -f "$ROOT/so-birfree.sh" ]]; then
-  exec bash "$ROOT/so-birfree.sh" "$@"
-fi
-SRC="${BIRFREE_SRC:-$(cd "$ROOT/../.." && pwd)/birfree}"
-[[ -f "$SRC/so-birfree.sh" ]] || { echo 'Não encontrei so-birfree.sh; defina BIRFREE_SRC.' >&2; exit 1; }
-export BIRFREE_PACOTES_INSTALADOR="$ROOT/instalar-pacotes"
-exec bash "$SRC/so-birfree.sh" "$@"
+case "${1:-}" in
+  ''|--atualizar) exec "$ROOT/instalar-pacotes" ;;
+  --mostrar) exec "$ROOT/instalar-pacotes" --mostrar ;;
+  --migrar) shift; exec bash "$ROOT/so-birfree.sh" "$@" ;;
+  --simular|--desfazer) exec bash "$ROOT/so-birfree.sh" "$@" ;;
+  -h|--help)
+    printf '%s\n' './instalar-birfree              instala/atualiza a DE completa na base atual' \
+      './instalar-birfree --atualizar  mesma atualização, para quem já usa Birfree' \
+      './instalar-birfree --mostrar    confere e lista os pacotes sem instalar' \
+      './instalar-birfree --migrar     migração antiga, com mudanças no sistema' \
+      './instalar-birfree --desfazer   desfaz uma migração anterior'
+    ;;
+  *) printf 'Opção desconhecida: %s\n' "$1" >&2; exit 1 ;;
+esac

@@ -1,12 +1,14 @@
-birfree-icons: 1.0.0.r15.gf2e541b6-1
-birfree: 1.0.0.r71.g8b714f89-1
+Birfree teste 5.5 — 19/10/2026
+Base de execução: KDE/Qt atuais compatíveis; forks ainda em desenvolvimento.
+Commit dos fontes: dd6bf20b47b28b9ea468c6f4f429065c9bcb5c7b
 
-Compilação de birfree-icons-1.0.0.r15.gf2e541b6-1-any.pkg.tar.zst:
-installed = kwin-6.7.5-1-x86_64
-installed = kwin-x11-6.7.5-1-x86_64
-installed = qt6-base-6.11.2-3-x86_64
+birfree-icons 1.0.0.r16.gdd6bf20b-1
+birfree 1.0.0.r78.gdd6bf20b-1
 
-Compilação de birfree-1.0.0.r71.g8b714f89-1-x86_64.pkg.tar.zst:
+installed = kcoreaddons-6.30.0-1-x86_64
+installed = kscreen-6.7.5-1-x86_64
+installed = kscreenlocker-6.7.5-1-x86_64
 installed = kwin-6.7.5-1-x86_64
-installed = kwin-x11-6.7.5-1-x86_64
+installed = plasma-workspace-6.7.5-1-x86_64
+installed = powerdevil-6.7.5-2-x86_64
 installed = qt6-base-6.11.2-3-x86_64

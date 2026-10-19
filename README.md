@@ -1,21 +1,16 @@
-# Birfree — TESTE 5
+# Birfree — TESTE 5.5
 
 Pré-release experimental para **Arch Linux x86_64**.
 
 ## Baixar
 
-[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5/Birfree-1.0.0-x86_64.tar.gz)
+[Baixar Birfree-1.0.0-x86_64.tar.gz](https://github.com/NEOpisa/test/releases/download/v1.0.0-test.5.5/Birfree-1.0.0-x86_64.tar.gz)
 
-O arquivo inclui os pacotes, o **so-birfree.sh original**, instalador,
-licença, versões e checksums. Não precisa do repositório privado nem compilar.
-Extraia em uma pasta nova; não misture com arquivos dos testes anteriores.
-Os scripts neste repositório documentam o fluxo; para instalar, baixe o
-arquivo completo da Release, que também contém os pacotes.
+O arquivo inclui os pacotes prontos, os instaladores, licenças, versões,
+checksums e os fontes desta versão. Não precisa do repositório privado nem
+compilar. Extraia em uma pasta nova; não misture com testes anteriores.
 
 ## Já tem o Birfree? Atualize
-
-Quem instalou um teste anterior só precisa atualizar os pacotes (não migra,
-não troca repositórios, não mexe nas sessões):
 
 ```sh
 curl -fLO https://raw.githubusercontent.com/NEOpisa/test/main/atualizar-birfree
@@ -23,11 +18,37 @@ chmod +x atualizar-birfree
 ./atualizar-birfree
 ```
 
-O script baixa o teste mais novo, confere o SHA-256 e roda
-`./instalar-birfree --atualizar`. Depois, saia da sessão e entre de novo em
-**Birfree**.
+O script baixa o teste mais novo, confere o SHA-256 e instala só os pacotes
+do Birfree (não migra, não troca repositórios, não mexe nas sessões).
+Depois, salve o trabalho, saia da sessão e entre de novo em **Birfree**.
 
-## O que há de novo no teste 5
+Com o arquivo já extraído, `./instalar-birfree` faz a mesma atualização.
+**Mudou no 5.5:** sem opção, o `instalar-birfree` agora só instala/atualiza os
+pacotes. A migração completa do sistema virou `./instalar-birfree --migrar`;
+`--desfazer` continua igual.
+
+## O que há de novo no teste 5.5
+
+- **Sessão dentro do menu.** O botão Sessão saiu da barra superior e foi para
+  o rodapé do menu de aplicativos: um clique expande Bloquear, Suspender,
+  Sair, Reiniciar e Desligar ali mesmo. Sair, reiniciar e desligar pedem um
+  segundo clique.
+- **Bcontrol**, as Configurações próprias do Birfree: Aparência, Sobre e Apps
+  X11 em páginas próprias; energia, telas, teclado, mouse, som e rede pelos
+  módulos do KDE embutidos. Avisa de alterações não salvas.
+- **Apps X11:** escala e leitura do teclado nas Configurações, e o comando
+  `birfree-x11 <app>` para rodar um aplicativo X11 num XWayland em janela.
+- Dock em pé, à esquerda ou à direita, e correções de sessão, traduções e
+  estilo da árvore atual.
+- Os fontes dos cinco forks KDE 6.7.5 (BWin, birfree-workspace, gigamana,
+  bscreen, bscreenlocker) vão no arquivo, mas **ainda não são instalados**:
+  a base continua sendo o KWin/Plasma do Arch.
+
+Pacotes: `birfree 1.0.0.r78.gdd6bf20b-1` e
+`birfree-icons 1.0.0.r16.gdd6bf20b-1`, compilados contra KWin 6.7.5-1 e
+Qt 6.11.2-3 (o instalador recusa outra versão sem remover nada).
+
+## O que havia de novo no teste 5
 
 **Instalação que aguenta o Arch Archive lento.** No teste 4 a migração
 podia parar em

@@ -32,11 +32,22 @@ ACAO=migrar
 TRAVA=2026/10/01
 MIRRORLIST=/etc/pacman.d/mirrorlist
 PACOTES_INSTALADOR="${BIRFREE_PACOTES_INSTALADOR:-$RAIZ/instalar-pacotes}"
+# A árvore nova exige a base local pronta. Arquivos públicos anteriores,
+# sem estas ferramentas, conservam o instalador compatível com seus binários.
+REPOS_LOCAIS=0
+[[ ! -f $RAIZ/base/forks.json ]] || REPOS_LOCAIS=1
+REPO_LOCAL="${BIRFREE_REPO:-$(dirname "$RAIZ")/birfree-repo}"
 # A distribuição pública inclui este ajudante e usa binários; a árvore fonte
 # continua podendo compilar pelo instalar.sh original.
 SUPORTE=(sddm kwin qt6-base plasma-desktop systemsettings kde-gtk-config xdg-desktop-portal-kde
          kscreen kscreenlocker bluedevil kdeplasma-addons qt6-tools kwallet-pam
          python-dbus networkmanager power-profiles-daemon)
+if ((REPOS_LOCAIS)); then
+    SUPORTE=(sddm bwin birfree-workspace gigamana bscreen bscreenlocker qt6-base
+             plasma-desktop systemsettings kde-gtk-config xdg-desktop-portal-kde
+             bluedevil kdeplasma-addons qt6-tools kwallet-pam python-dbus
+             networkmanager power-profiles-daemon)
+fi
 
 # ------------------------------------------------------------ as listas --
 # Plasma que sai: a sessão (Wayland e X11), o metapacote e o que só o
@@ -46,6 +57,7 @@ PLASMA_SAI=(
     plasma-vault plasma-thunderbolt plasma-keyboard plasma-login-manager
     oxygen oxygen-cursors oxygen-icons oxygen-sounds krdp kwrited
 )
+(( ! REPOS_LOCAIS )) || PLASMA_SAI+=(kwin-x11)
 # LXQt que sai (com as bibliotecas dele) e as ferramentas que só a sessão
 # LXQt usava. kdialog, playerctl e xwallpaper ficam: o Glinux usa.
 LXQT_SAI=(
@@ -54,13 +66,18 @@ LXQT_SAI=(
 )
 # Nunca podem sair (o Glinux e o Birfree usam): conferidos antes de remover
 PROTEGIDOS=(
-    birfree birfree-icons kwin kwin-x11 kglobalacceld polkit-kde-agent powerdevil
+    birfree birfree-icons kwin kglobalacceld polkit-kde-agent powerdevil
     kwallet-pam plasma-workspace plasma-desktop systemsettings kde-gtk-config
     breeze breeze-gtk breeze-cursors xsettingsd xdg-desktop-portal-kde aurorae
     kscreen kscreenlocker plasma-nm plasma-pa bluedevil milou kdeplasma-addons
     qt6-tools python-dbus kdialog playerctl xwallpaper
     dolphin konsole kate ark spectacle discover flatpak
 )
+if ((REPOS_LOCAIS)); then
+    PROTEGIDOS+=(bwin birfree-workspace gigamana bscreen bscreenlocker)
+else
+    PROTEGIDOS+=(kwin-x11)
+fi
 # Sessões do Plasma que o SDDM não deve mais mostrar (o .desktop do Wayland é
 # do plasma-workspace, que fica; o NoExtract impede que volte na atualização)
 SESSAO_PLASMA=usr/share/wayland-sessions/plasma.desktop
@@ -171,6 +188,10 @@ guardar_estado() {
 }
 
 travar_sistema() {
+    if ((REPOS_LOCAIS)); then
+        travar_kde
+        return
+    fi
     passo "Travando o sistema em ${TRAVA} (Arch Linux Archive)"
     if grep -q "archive.archlinux.org/repos/$TRAVA/" "$MIRRORLIST" 2>/dev/null; then
         ok "o mirrorlist já aponta para $TRAVA"
@@ -208,6 +229,38 @@ travar_sistema() {
             erro "o pacman -Syyu na data travada falhou (o Archive pode estar fora do ar); nada foi removido. Rode o ./so-birfree.sh de novo mais tarde: ele continua de onde parou"
     fi
     ok "repositórios sincronizados em $TRAVA (versões instaladas conferidas antes de remover sessões)"
+}
+
+travar_kde() {
+    passo "Travando KDE/Qt nos repositórios locais; Arch volta a atualizar"
+    if ((SIMULAR)); then
+        info "[simular] conferir os cinco forks e o snapshot KDE/Qt em $REPO_LOCAL"
+        info "[simular] inserir [birfree] e [birfree-kde] antes do Arch, com backup"
+        info "[simular] restaurar o mirrorlist normal do backup anterior"
+        info "[simular] sudo pacman -Syyu (transação completa, sem downgrade automático)"
+        return
+    fi
+    python3 "$RAIZ/tools/birfree-repos.py" --check || erro "prepare a base local antes de migrar (base/README.md); nada foi instalado"
+    local normal conf
+    normal=$(python3 "$RAIZ/tools/birfree-repos.py" --mirror-backup) || erro "falta o mirrorlist normal"
+    touch "$GUARDA/repos-locais"
+    # DownloadUser=alpm precisa atravessar a home para acessar file://.
+    # O ACL concede somente travessia, sem listar ou ler os outros arquivos.
+    if [[ $(pacman-conf DownloadUser 2>/dev/null) == alpm ]]; then
+        command -v getfacl >/dev/null && command -v setfacl >/dev/null || erro "instale acl para o repo local"
+        getfacl -p "$HOME" >"$GUARDA/repo-home-acl.txt"
+        setfacl -m u:alpm:--x "$HOME"
+        sudo -u alpm test -r "$REPO_LOCAL/birfree-kde/birfree-kde.db" || erro "alpm não consegue ler $REPO_LOCAL; confira a travessia dos diretórios"
+    fi
+    mkdir -p "$GUARDA/raiz/etc/pacman.d"
+    cp -a "$MIRRORLIST" "$GUARDA/raiz$MIRRORLIST"
+    conf=$(mktemp --tmpdir birfree-local.XXXXXX.conf)
+    python3 "$RAIZ/tools/birfree-repos.py" --render /etc/pacman.conf >"$conf" || { rm -f "$conf"; erro "pacman.conf não foi alterado"; }
+    sudo install -m644 "$conf" /etc/pacman.conf
+    rm -f "$conf"
+    sudo install -m644 "$normal" "$MIRRORLIST"
+    pacman_archive -Syyu || erro "a atualização não terminou; os repositórios e o backup foram preservados em $GUARDA"
+    ok "KDE/Qt em $TRAVA; demais pacotes nos mirrors normais"
 }
 
 instalar_birfree() {
@@ -363,6 +416,13 @@ resumo() {
     local orfaos
     orfaos=$(pacman -Qqdt 2>/dev/null | tr '\n' ' ') || true
     [[ -n $orfaos ]] && info "órfãos que sobraram (não removidos): $orfaos"
+    if ((REPOS_LOCAIS)); then
+        info "KDE/Qt em $TRAVA por [birfree-kde]; demais pacotes acompanham o Arch"
+        info "BWin só Wayland; desktop leve do Glinux fora desta migração"
+        info "Backup: $GUARDA · voltar: $0 --desfazer"
+        info "Saia desta sessão e entre em Birfree no SDDM"
+        return
+    fi
     cat <<EOF
 
   Saia desta sessão e entre em "Birfree" no SDDM. O Glinux continua igual
@@ -382,6 +442,16 @@ desfazer() {
     [[ -n $ultimo ]] || erro "nenhum backup em $GUARDA_RAIZ"
     ultimo=${ultimo%/}
     info "backup: ${ultimo/#$HOME/\~}"
+    # Os arquivos são copiados para manter o backup reutilizável.
+    # Devolve os repositórios antes de tentar reinstalar sessões.
+    if [[ -f $ultimo/repos-locais ]]; then
+        if [[ -f $ultimo/repo-home-acl.txt ]]; then
+            x setfacl --restore="$ultimo/repo-home-acl.txt"
+        fi
+        x sudo cp -a "$ultimo/raiz/etc/pacman.conf" /etc/pacman.conf
+        x sudo cp -a "$ultimo/raiz$MIRRORLIST" "$MIRRORLIST"
+        PACMAN_CONF_ARCHIVE=""
+    fi
     pacotes=$(cat "$ultimo/plasma-removidos.txt" "$ultimo/lxqt-removidos.txt" 2>/dev/null | tr '\n' ' ')
     if [[ -n $pacotes ]]; then
         # shellcheck disable=SC2086
@@ -407,14 +477,14 @@ desfazer() {
     if [[ -d $ultimo/raiz ]]; then
         while IFS= read -r -d '' f; do
             x sudo mkdir -p "$(dirname "${f#"$ultimo/raiz"}")"
-            x sudo mv "$f" "${f#"$ultimo/raiz"}"
+            x sudo cp -a "$f" "${f#"$ultimo/raiz"}"
         done < <(sudo find "$ultimo/raiz" \( -type f -o -type l \) -print0)
         ok "arquivos do sistema devolvidos (sessão Plasma, ajudante do LXQt)"
     fi
     if [[ -d $ultimo/casa ]]; then
         while IFS= read -r -d '' f; do
             x mkdir -p "$(dirname "$HOME${f#"$ultimo/casa"}")"
-            x mv "$f" "$HOME${f#"$ultimo/casa"}"
+            x cp -a "$f" "$HOME${f#"$ultimo/casa"}"
         done < <(find "$ultimo/casa" \( -type f -o -type l \) -print0)
         ok "arquivos da sessão LXQt devolvidos"
     fi
@@ -467,7 +537,11 @@ fi
 
 conferir
 if ((!SIMULAR)); then
-    printf '\nIsto usa o Arch Archive de 01/10/2026, instala o Birfree, configura o SDDM e REMOVE as sessões Plasma e LXQt (com backup). Continuar? [s/N] '
+    if ((REPOS_LOCAIS)); then
+        printf '\nIsto usa os forks locais, mantém KDE/Qt em 01/10/2026, libera o resto do Arch e REMOVE as sessões Plasma/LXQt (com backup). Continuar? [s/N] '
+    else
+        printf '\nIsto usa o Arch Archive de 01/10/2026, instala o Birfree, configura o SDDM e REMOVE as sessões Plasma e LXQt (com backup). Continuar? [s/N] '
+    fi
     read -r resposta
     [[ $resposta == [sS]* ]] || { echo "Nada foi mudado."; exit 0; }
 fi
