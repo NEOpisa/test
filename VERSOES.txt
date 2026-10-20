@@ -1,14 +1,7 @@
-Birfree teste 5.5 (patch de 19/10/2026: Configurações do Sistema, sessão e gerenciador de apps)
-Base de execução: KDE/Qt atuais compatíveis; forks ainda em desenvolvimento.
-Commit dos fontes: 6745ac3251e17527b31118d9a5b379a5f0e66f62
-
-birfree-icons 1.0.0.r17.g3be6569a-1
-birfree 1.0.0.r82.g6745ac32-1
-
-installed = kcoreaddons-6.30.0-1-x86_64
-installed = kscreen-6.7.5-1-x86_64
-installed = kscreenlocker-6.7.5-1-x86_64
-installed = kwin-6.7.5-1-x86_64
-installed = plasma-workspace-6.7.5-1-x86_64
-installed = powerdevil-6.7.5-2-x86_64
-installed = qt6-base-6.11.2-3-x86_64
+Birfree TESTE 6 — 20/10/2026
+Tag: v1.0.0-test.6
+Commit dos fontes: 8052b8c210f8239d6d1a66cf2fc0c91024054fc4
+birfree 1.0.0.r92.g8052b8c2-1
+birfree-icons 1.0.0.r18.ge4b55699-1
+Distribuição: fontes; compilação somente no computador de destino.
+Base: KWin/Plasma/Qt instalados; forks não substituídos.

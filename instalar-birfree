@@ -2,6 +2,13 @@
 # Instala a DE completa; a migração antiga continua disponível explicitamente.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
+# Teste 6: os pacotes são compilados no computador de quem instala.
+if [[ -f "$ROOT/fontes/Birfree-fontes.tar.gz" && ! -d "$ROOT/pacotes" ]]; then
+  case "${1:-}" in
+    ''|--atualizar) exec bash "$ROOT/instalar-fontes" ;;
+    --mostrar) exec bash "$ROOT/instalar-fontes" --mostrar ;;
+  esac
+fi
 case "${1:-}" in
   ''|--atualizar) exec "$ROOT/instalar-pacotes" ;;
   --mostrar) exec "$ROOT/instalar-pacotes" --mostrar ;;
