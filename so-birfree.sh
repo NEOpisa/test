@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Deixa esta máquina só com o Birfree: instala o Birfree mais atualizado
-# (desta pasta) e tira o Plasma e o LXQt. Fica só o que o Birfree e o
-# Glinux (desktop leve kwin_x11 + modo jogo) usam do KDE.
+# (desta pasta) e tira o Plasma e o LXQt. Fica só o que o Birfree usa do
+# KDE. O Birfree é só Wayland: o kwin-x11 e a sessão X11 do Plasma saem.
 #
 #   ./so-birfree.sh                faz tudo (pede a senha do sudo e confirmação)
 #   ./so-birfree.sh --simular      mostra o que faria, sem mudar nada
@@ -13,8 +13,8 @@
 #
 # Trava o sistema na data da última atualização (TRAVA, no Arch Linux
 # Archive): o Birfree é feito sobre o KDE 6.7.5 / Frameworks 6.30 / Qt 6.11,
-# e o Plasma 6.8 (16/10/2026) trouxe Qt 6.12 e tirou o kwin-x11 que o desktop
-# leve do Glinux usa. O pacman -Syu passa a atualizar só até essa data, de
+# e o Plasma 6.8 (16/10/2026) trouxe Qt 6.12. O pacman -Syu passa a
+# atualizar só até essa data, de
 # forma coerente (o kernel CachyOS, que fica no fim do pacman.conf, segue).
 #
 # O Birfree é feito sobre peças do KDE (KWin, plasma-workspace, Kirigami,
@@ -55,28 +55,25 @@ fi
 PLASMA_SAI=(
     plasma-meta plasma-x11-session plasma-welcome plasma-browser-integration
     plasma-vault plasma-thunderbolt plasma-keyboard plasma-login-manager
-    oxygen oxygen-cursors oxygen-icons oxygen-sounds krdp kwrited
+    oxygen oxygen-cursors oxygen-icons oxygen-sounds krdp kwrited kwin-x11
 )
-(( ! REPOS_LOCAIS )) || PLASMA_SAI+=(kwin-x11)
 # LXQt que sai (com as bibliotecas dele) e as ferramentas que só a sessão
-# LXQt usava. kdialog, playerctl e xwallpaper ficam: o Glinux usa.
+# LXQt usava. kdialog (aviso de queda da shell) e playerctl ficam.
 LXQT_SAI=(
     lxqt-session lxqt-panel lxqt-globalkeys lxqt-qtplugin lxqt-notificationd
     lxqt-powermanagement lxqt-themes lxqt-menu-data xcape i3lock xss-lock copyq
 )
-# Nunca podem sair (o Glinux e o Birfree usam): conferidos antes de remover
+# Nunca podem sair (o Birfree usa): conferidos antes de remover
 PROTEGIDOS=(
     birfree birfree-icons kwin kglobalacceld polkit-kde-agent powerdevil
     kwallet-pam plasma-workspace plasma-desktop systemsettings kde-gtk-config
     breeze breeze-gtk breeze-cursors xsettingsd xdg-desktop-portal-kde aurorae
     kscreen kscreenlocker plasma-nm plasma-pa bluedevil milou kdeplasma-addons
-    qt6-tools python-dbus kdialog playerctl xwallpaper
+    qt6-tools python-dbus kdialog playerctl
     dolphin konsole kate ark spectacle discover flatpak
 )
 if ((REPOS_LOCAIS)); then
     PROTEGIDOS+=(bwin birfree-workspace gigamana bscreen bscreenlocker)
-else
-    PROTEGIDOS+=(kwin-x11)
 fi
 # Sessões do Plasma que o SDDM não deve mais mostrar (o .desktop do Wayland é
 # do plasma-workspace, que fica; o NoExtract impede que volte na atualização)
@@ -212,7 +209,7 @@ travar_sistema() {
         else
             printf '%s\n' \
                 "# Birfree: sistema travado em $TRAVA (so-birfree.sh). O Birfree é feito" \
-                "# sobre o KDE 6.7.5 / Qt 6.11; o Plasma 6.8 quebraria ele e o Glinux." \
+                "# sobre o KDE 6.7.5 / Qt 6.11; o Plasma 6.8 quebraria ele." \
                 "# O mirrorlist de antes está em ${GUARDA}/raiz$MIRRORLIST" \
                 "# (./so-birfree.sh --desfazer devolve)." \
                 "Server = https://archive.archlinux.org/repos/$TRAVA/\$repo/os/\$arch" |
@@ -313,7 +310,7 @@ configurar_login() {
 }
 
 proteger() {
-    passo "Protegendo o que o Birfree e o Glinux usam"
+    passo "Protegendo o que o Birfree usa"
     # Tudo o que uma remoção recursiva levaria junto (fora a própria lista)
     # vira "instalado de propósito": nada do que fica vira órfão, nem agora
     # nem num pacman -Qdt futuro (o plasma-meta é que segurava essas peças)
@@ -398,7 +395,7 @@ remover_lxqt() {
     done
 }
 
-# Para tudo se uma remoção fosse levar algo que o Birfree ou o Glinux usam.
+# Para tudo se uma remoção fosse levar algo que o Birfree usa.
 # Uso: conferir_protegidos -Rp|-Rsp PACOTES (o mesmo modo da remoção de verdade)
 conferir_protegidos() {
     local modo=$1 p levaria
@@ -418,15 +415,14 @@ resumo() {
     [[ -n $orfaos ]] && info "órfãos que sobraram (não removidos): $orfaos"
     if ((REPOS_LOCAIS)); then
         info "KDE/Qt em $TRAVA por [birfree-kde]; demais pacotes acompanham o Arch"
-        info "BWin só Wayland; desktop leve do Glinux fora desta migração"
+        info "BWin só Wayland"
         info "Backup: $GUARDA · voltar: $0 --desfazer"
         info "Saia desta sessão e entre em Birfree no SDDM"
         return
     fi
     cat <<EOF
 
-  Saia desta sessão e entre em "Birfree" no SDDM. O Glinux continua igual
-  (desktop leve kwin_x11 e modo jogo).
+  Saia desta sessão e entre em "Birfree" no SDDM.
   Sistema travado em $TRAVA: o pacman -Syu não traz o Plasma 6.8.
   Backup: ${GUARDA/#$HOME/\~}   ·   voltar: $0 --desfazer
   Tela de entrada Birfree configurada no SDDM.

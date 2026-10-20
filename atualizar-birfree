@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Atualiza o Birfree já instalado para o teste mais novo deste repositório.
 # Baixa o arquivo da Release mais recente (pré-releases incluídas), confere o
-# SHA-256 e roda ./instalar-birfree --atualizar. A partir do teste 6, os
-# pacotes são compilados no computador de quem instala. Sem migração.
+# SHA-256 e roda ./instalar-birfree --atualizar: só os pacotes do Birfree, sem
+# migrar, sem trocar repositórios e sem mexer nas sessões.
 #
 #   ./atualizar-birfree              o teste mais novo
 #   ./atualizar-birfree v1.0.0-test.4  um teste específico
