@@ -17,7 +17,7 @@ if [[ -d "$ROOT/pacotes" ]]; then
   [[ -f "$ROOT/SHA256SUMS" ]] || { printf 'Falta SHA256SUMS no arquivo extraído.\n' >&2; exit 1; }
   ( cd "$ROOT" && sha256sum --check --status SHA256SUMS ) \
     || { printf 'A verificação dos arquivos falhou. Extraia novamente ou transfira outra cópia.\n' >&2; exit 1; }
-  for nome in birfree-icons birfree; do
+  for nome in birfree-icons birfree birfree-terminal; do
     arquivos=("$ROOT/pacotes/$nome"-[0-9]*.pkg.tar.zst)
     [[ ${#arquivos[@]} -eq 1 && -f "${arquivos[0]}" ]] \
       || { printf 'Esperava um pacote de %s no arquivo extraído.\n' "$nome" >&2; exit 1; }
@@ -28,12 +28,12 @@ else
     echo 'Baixe e extraia o arquivo .tar.gz completo da Release; faltam os pacotes.' >&2
     exit 1
   }
-  selecionados="$(python3 "$ROOT/scripts/indexed-packages.py" "$ROOT/vendor/repo" birfree-icons birfree)"
+  selecionados="$(python3 "$ROOT/scripts/indexed-packages.py" "$ROOT/vendor/repo" birfree-icons birfree birfree-terminal)"
   while IFS= read -r arquivo; do
     [[ -f "$arquivo" ]] && pacotes+=("$arquivo")
   done <<< "$selecionados"
 fi
-if [[ ${#pacotes[@]} -ne 2 ]]; then
+if [[ ${#pacotes[@]} -ne 3 ]]; then
   printf '%s\n' 'Faltam os pacotes. Gere-os com ./neo/packaging/build-birfree.sh' >&2
   exit 1
 fi
@@ -45,16 +45,36 @@ for arquivo in "${pacotes[@]}"; do
 done
 [[ "${1:-}" != --mostrar ]] || exit 0
 # Plugins C++ precisam da mesma ABI de KWin/Qt usada na compilação.
-if [[ -f "$ROOT/VERSOES.txt" ]]; then
+INCLUIR='Include = /etc/pacman.d/birfree-congelar.conf'
+pilha_ok() {
+  local nome esperado atual
   for nome in kwin qt6-base; do
     esperado=$(sed -n "s/^installed = $nome-\(.*\)-x86_64$/\1/p" "$ROOT/VERSOES.txt" | head -n1)
     atual=$(pacman -Q "$nome" 2>/dev/null | cut -d ' ' -f2) || true
     [[ -n "$esperado" && "$atual" == "$esperado" ]] || {
-      printf 'Pilha incompatível: %s instalado=%s; compilado=%s. Nada foi removido.\n' "$nome" "${atual:-ausente}" "${esperado:-desconhecido}" >&2
-      exit 1
+      printf 'Pilha: %s instalado=%s; compilado=%s.\n' "$nome" "${atual:-ausente}" "${esperado:-desconhecido}"
+      return 1
     }
   done
+}
+if [[ -f "$ROOT/VERSOES.txt" ]] && ! pilha_ok; then
+  # O KDE/Qt fica congelado no -Syu; este Birfree foi compilado contra outro.
+  # Atualiza o sistema inteiro uma vez sem o congelamento e confere de novo.
+  printf '\nEste Birfree foi compilado contra outro KDE/Qt. O pacman vai atualizar o\nsistema inteiro uma vez, sem o congelamento, e pedir confirmação.\n'
+  semgelo=$(mktemp "${TMPDIR:-/tmp}/birfree-pacman.XXXXXX.conf")
+  trap 'rm -f "$semgelo"' EXIT
+  grep -vxF "$INCLUIR" /etc/pacman.conf > "$semgelo"
+  sudo pacman --config "$semgelo" -Syu
+  pilha_ok || {
+    printf 'O KDE/Qt dos repositórios não é o deste Birfree. Nada do Birfree foi instalado;\naguarde o próximo teste.\n' >&2
+    exit 1
+  }
 fi
 printf '\nO pacman vai mostrar a transação e pedir confirmação.\n'
 sudo pacman -U --overwrite usr/share/wayland-sessions/birfree.desktop "${pacotes[@]}"
+# Congela o KDE/Qt no -Syu (uma linha na seção [options] do pacman.conf)
+if ! grep -qxF "$INCLUIR" /etc/pacman.conf; then
+  sudo sed -i "/^\[options\]/a $INCLUIR" /etc/pacman.conf
+  printf '\nO pacman -Syu agora não atualiza o KDE nem o Qt (ver /etc/pacman.d/birfree-congelar.conf).\n'
+fi
 printf '\nAtualização concluída. Salve seu trabalho, saia da sessão e entre novamente em Birfree.\n'

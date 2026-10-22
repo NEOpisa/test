@@ -1,9 +1,11 @@
-Birfree teste 6 (patch de 21/10/2026: barra integrada, iBirfree, passarinho kawaii, vidro firme ao arrastar, Meta+W arrasta janelas, áreas numeradas, dock some em tela cheia)
+Birfree teste 6.2 (periquito e harpia, abertura animada, pacman -Syu sem KDE/Qt, Terminal Birfree, widgets calendário/monitor/notas, fontes do relógio)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: 0c84132eb3369fbdd1737222129b02b186a07b92
+Commit dos fontes: 76dbfdac5dab908ece638dd1ac9a4ec78915aad3
+Terminal Birfree: Konsole v26.08.1 + branch birfree/1.0 em a7f64c17eec75db75d3c646216668c8c6d3b6cdf
 
 birfree-icons 1.0.0.r20.g0c84132e-1
-birfree 1.0.0.r105.g0c84132e-1
+birfree 1.0.0.r125.g76dbfdac-1
+birfree-terminal 26.08.1.r1.ga7f64c17e-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
 installed = kscreen-6.7.5-1-x86_64
