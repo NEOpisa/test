@@ -1,4 +1,4 @@
-# Birfree — TESTE 6 (patch de 20/10)
+# Birfree — TESTE 6 (patch de 21/10)
 
 Pré-release experimental para **Arch Linux x86_64**.
 
@@ -26,10 +26,32 @@ Depois, salve o trabalho, saia da sessão e entre de novo em **Birfree**.
 Com o arquivo já extraído, `./instalar-birfree` faz a mesma atualização.
 A migração completa do sistema é `./instalar-birfree --migrar`.
 
-## O que há de novo no patch do teste 6 (20/10)
+## O que há de novo no patch de 21/10
 
 O link e o `atualizar-birfree` são os mesmos: quem já tem o Birfree só roda
 o `./atualizar-birfree` de novo.
+
+- **Barra integrada.** Configurações › Birfree › Barra e dock › **Barras:
+  Integrada**: uma barra só, de ponta a ponta, na borda que você escolher
+  (topo, embaixo, esquerda ou direita). A dock fica inteira no centro, o app
+  em foco e o menu dele à esquerda, e a bandeja e a cápsula (com o relógio)
+  no fim.
+- **iBirfree, os ícones e cursores novos.** Konsole, Firefox, Chrome, Steam e
+  outros apps redesenhados, e cursores novos. Os ícones do sistema e os apps
+  que seguem a cor de destaque (Dolphin, pastas, Configurações) continuam
+  iguais e mudam de cor com ela.
+- **Passarinho kawaii.** A entrada e a saída ganharam olhos que piscam,
+  olhos felizes, uma volta inteira com brilhos, rastro no voo e
+  coraçõezinhos no pouso.
+- **Vidro sem piscar ao arrastar janelas** (o efeito que balança a janela
+  desligava o desfoque).
+- **Visão geral (Meta+W):** arrastar uma janela para outra área funciona, e
+  as miniaturas das áreas mostram as janelas.
+- **Áreas numeradas certinho:** 1, 2, 3… mesmo depois de criar ou remover.
+- **Tela cheia:** a dock some junto com a barra do topo.
+- **Dock:** o ícone de cada janela segue o tema (o Dolphin aparecia vermelho).
+
+## Patch anterior (20/10)
 
 - **Instalação sem compilar, como era antes.** A primeira versão do teste 6
   compilava tudo no seu computador e podia parar com erro de compilação.
@@ -55,8 +77,8 @@ o `./atualizar-birfree` de novo.
   XWayland, e a página Apps X11 das Configurações continua. A migração
   (`--migrar`) agora também tira o `kwin-x11` e a sessão X11 do Plasma.
 
-Pacotes: `birfree 1.0.0.r94.g6b47fa0f-1` e
-`birfree-icons 1.0.0.r18.ge4b55699-1`, compilados contra KWin 6.7.5-1 e
+Pacotes: `birfree 1.0.0.r105.g0c84132e-1` e
+`birfree-icons 1.0.0.r20.g0c84132e-1`, compilados contra KWin 6.7.5-1 e
 Qt 6.11.2-3 (o instalador recusa outra versão sem remover nada).
 
 ## O que havia de novo no teste 6 (primeira versão)

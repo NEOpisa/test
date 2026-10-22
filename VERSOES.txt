@@ -1,9 +1,9 @@
-Birfree teste 6 (patch de 20/10/2026: pacotes prontos de novo, papel nítido, widgets, relógio, luz do teclado, Konsole sem fantasma, só Wayland)
+Birfree teste 6 (patch de 21/10/2026: barra integrada, iBirfree, passarinho kawaii, vidro firme ao arrastar, Meta+W arrasta janelas, áreas numeradas, dock some em tela cheia)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: 6b47fa0f63a3a63051bb78e0a4a43bb5f1094510
+Commit dos fontes: 0c84132eb3369fbdd1737222129b02b186a07b92
 
-birfree-icons 1.0.0.r18.ge4b55699-1
-birfree 1.0.0.r94.g6b47fa0f-1
+birfree-icons 1.0.0.r20.g0c84132e-1
+birfree 1.0.0.r105.g0c84132e-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
 installed = kscreen-6.7.5-1-x86_64

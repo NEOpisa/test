@@ -291,7 +291,7 @@ configurar_login() {
         info "[simular] tema e última sessão Birfree em $conf"
     else
         sudo mkdir -p /etc/sddm.conf.d
-        printf '[Theme]\nCurrent=birfree\nCursorTheme=Birfree-Cursors\n[Users]\nRememberLastSession=true\n' | sudo tee "$conf" >/dev/null
+        printf '[Theme]\nCurrent=birfree\nCursorTheme=iBirfree\n[Users]\nRememberLastSession=true\n' | sudo tee "$conf" >/dev/null
         sudo mkdir -p /var/lib/sddm
         if [[ -f /var/lib/sddm/state.conf ]]; then
             sudo mkdir -p "$GUARDA/raiz/var/lib/sddm"
