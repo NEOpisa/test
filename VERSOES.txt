@@ -1,11 +1,11 @@
-Birfree teste 6.2 (periquito e harpia, abertura animada, pacman -Syu sem KDE/Qt, Terminal Birfree, widgets calendário/monitor/notas, fontes do relógio)
+Birfree teste 6.2, patch de 30/10 (Terminal Birfree como o Terminal do macOS, botões de aba/divisão na faixa da janela, abre no último tamanho)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: 76dbfdac5dab908ece638dd1ac9a4ec78915aad3
-Terminal Birfree: Konsole v26.08.1 + branch birfree/1.0 em a7f64c17eec75db75d3c646216668c8c6d3b6cdf
+Commit dos fontes: d2cb6dc03693388c812ba77758bce9339d89ca81
+Terminal Birfree: Konsole v26.08.1 + branch birfree/1.0 em 61ecdb34b66857565486b2b5367e88b66adee773
 
 birfree-icons 1.0.0.r20.g0c84132e-1
-birfree 1.0.0.r125.g76dbfdac-1
-birfree-terminal 26.08.1.r1.ga7f64c17e-1
+birfree 1.0.0.r128.gd2cb6dc0-1
+birfree-terminal 26.08.1.r6.g61ecdb34b-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
 installed = kscreen-6.7.5-1-x86_64
