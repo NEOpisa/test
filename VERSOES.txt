@@ -1,10 +1,10 @@
 Birfree teste 6.2, patch Rust 2 (Meta+W: janelas em até 70% do tamanho real e 60% menores ao arrastar; mais o patch Rust 1: energia, avisos, bandeja e Discord em Rust)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: 0caf572263eadb5f2d51ab82584a2279f0139ae6
+Commit dos fontes: 1468a289442bca493043010d92d180d0e946b0a2
 Terminal Birfree: Konsole v26.08.1 + branch birfree/1.0 em 66eb0863e2dbb2e0fddd296d2f3245ad273ae141
 
 birfree-icons 1.0.0.r23.gd3b8e2d6-1
-birfree 1.0.0.r140.g0caf5722-1
+birfree 1.0.0.r142.g1468a289-1
 birfree-terminal 26.08.1.r8.g66eb0863e-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
