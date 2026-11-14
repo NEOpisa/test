@@ -1,10 +1,10 @@
-Birfree teste 6.2, patch de 30/10 (Terminal Birfree como o Terminal do macOS, botões de aba/divisão na faixa da janela, abre no tamanho da última janela redimensionada)
+Birfree teste 6.2, patch Rust 1 (lógica da shell em Rust: perfis de energia, avisos na tela, bandeja e ponte do Discord; área certa depois de suspender, arrastar janelas no Meta+W, cursor)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: 4cb8a04946eaed28879a923fbf35b836a613bf0c
+Commit dos fontes: 324b2f0f834cd8d6b96477b58a96d2fb50f3f179
 Terminal Birfree: Konsole v26.08.1 + branch birfree/1.0 em 66eb0863e2dbb2e0fddd296d2f3245ad273ae141
 
-birfree-icons 1.0.0.r20.g0c84132e-1
-birfree 1.0.0.r131.g4cb8a049-1
+birfree-icons 1.0.0.r23.gd3b8e2d6-1
+birfree 1.0.0.r138.g324b2f0f-1
 birfree-terminal 26.08.1.r8.g66eb0863e-1
 
 installed = kcoreaddons-6.30.0-1-x86_64

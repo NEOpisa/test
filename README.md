@@ -61,7 +61,7 @@ Ainda falta validar a instalação completa em uma máquina limpa.
 
 ## Desenvolvimento local
 
-Fontes: `/home/neo/Projetos/birfree`.
+Fontes: `/home/neo/Projetos/Birfree/birfree`.
 
 - `./instalar.sh`: compila e instala a DE completa sobre a base KDE atual,
   incluindo menu (com o gerenciador de apps), sessão, estilos e efeitos.
